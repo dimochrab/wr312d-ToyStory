@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toy Story</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <img src="images/toy-story-logo.png" alt="toy-story-logo" class="toy-story-logo">
+    <div id="card-container">
+
+        <script>
+            // Utilisation de l'API Fetch pour charger le fichier JSON
+            fetch('datastory.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Création des éléments HTML à partir des données JSON
+                    const cardContainer = document.getElementById('card-container');
+    
+                    data.forEach(toy => {
+                        // Création de la carte
+                        const card = document.createElement('div');
+                        card.classList.add('toy-card');
+                        card.classList.add(toy.classe); // Ajoute la classe spécifique
+                        
+    
+                        // Image
+                        const imageContainer = document.createElement('div');
+                        imageContainer.classList.add('toy-card__image');
+                        const gradientColors = `linear-gradient(to bottom, ${toy.color} 0%, rgba(0,0,0,1) 100%)`;
+                        imageContainer.style.background = gradientColors;
+                        const image = document.createElement('img');
+                        image.src = toy.photo;
+                        image.alt = toy.nom + '_img';
+                        imageContainer.appendChild(image);
+
+                        // Nom
+                        const name = document.createElement('div');
+                        name.classList.add('toy-card__name');
+                        name.textContent = toy.nom;
+                        name.style.backgroundColor = toy.color;
+    
+                        // Description
+                        const description = document.createElement('div');
+                        description.classList.add('toy-card__description');
+                        description.textContent = toy.info;
+                        
+    
+                        // Unit Stats
+                        const unitStats = document.createElement('div');
+                        unitStats.classList.add('toy-card__unit-stats');
+                        unitStats.style.backgroundColor = toy.color;
+                        
+    
+                        // Caractéristiques
+                        const characteristics = ['vie', 'discretion', 'action'];
+                        characteristics.forEach(char => {
+                            const oneThird = document.createElement('div');
+                            oneThird.classList.add('one-third');
+    
+                            const stat = document.createElement('div');
+                            stat.classList.add('stat');
+                            stat.textContent = toy[char];
+    
+                            const statValue = document.createElement('div');
+                            statValue.classList.add('stat-value');
+                            statValue.textContent = char.charAt(0).toUpperCase() + char.slice(1);
+    
+                            oneThird.appendChild(stat);
+                            oneThird.appendChild(statValue);
+                            unitStats.appendChild(oneThird);
+                        });
+    
+                        // Assemblage de la carte
+                        card.appendChild(imageContainer);
+                        card.appendChild(name);
+                        card.appendChild(description);
+                        card.appendChild(unitStats);
+    
+                        // Ajout de la carte au conteneur
+                        cardContainer.appendChild(card);
+                    });
+                })
+                .catch(error => console.error('Erreur lors du chargement du fichier JSON:', error));
+        </script>
+    </div>
+</body>
+
+</html>
